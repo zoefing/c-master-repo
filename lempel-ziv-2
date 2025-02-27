@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void lzdecode2(){
+  // tracker ints                                           
+  int i;
+  int j;
+  int k;
+
+  // get data length                                        
+  int dataLength;
+  scanf("%d", &dataLength);
+
+  // use dataLength to specify dictionary size              
+  char* dictionary = malloc(dataLength);
+
+  // for loop to setup dictionary                           
+  for (i = 0; i < dataLength; i++) {
+    // get input 
+    // convert to ascii
+    // and add to dictionary                      
+    int ascii;
+    scanf("%d", &ascii);
+    dictionary[i] = (char)ascii;
+  }
+
+  // get data length                                        
+  int dataSize;
+  scanf("%d", &dataSize);
+
+  // use dataSize to specify data size                      
+  char* data = malloc(dataSize);
+
+  // for loop to setup data                                 
+  for (j = 0; j < dataSize; j++) {
+    // get input and add to data                            
+    scanf("%d", &data[j]);
+  }
+
+  // decoded string                                         
+  char decoded[dataSize];
+
+  // for loop to iterate through "string"                   
+  for (k = 0; k < dataSize; k++) {
+    // at a given index, k, get the letter from             
+    // indexing the data array and then the dict array   
+    int index = data[k];
+    char a = dictionary[index];
+
+    // then, set the decoded string at that point           
+    // to that value                                        
+    decoded[k] = a;
+  }
+  
+  // had to look this up; null termination
+  decoded[dataSize] = '\0';
+
+  // print the decoded word                                 
+  printf("%s", decoded);
+}
+
+int main(){
+  lzdecode2();
+  return 0;
+}
