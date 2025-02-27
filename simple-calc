@@ -1,0 +1,45 @@
+#include <stdio.h>
+
+int main() {
+  // init storage vars                                                          
+  int num1;
+  int num2;
+  char operation;
+
+  //init result var                                                             
+  int result;
+
+  // get ints                                                                   
+  printf ("Enter two integers. Press return after each integer.\n");
+  scanf("%d", &num1);
+  scanf("%d", &num2);
+
+  // get operation                                                              
+  printf ("Enter an operation (+,-,*,/, or %%). Then press return.\n");
+  scanf(" %c", &operation);
+
+  // compute based on operator
+  if (operation == '+'){
+    result = num1 + num2;
+  }
+
+  else if (operation == '-'){
+    result = num1 - num2;
+  }
+
+  else if (operation == '*'){
+    result = num1 * num2;
+  }
+  
+  else if (operation == '/'){
+    result = num1 / num2;
+  }
+
+  else if (operation == '%'){
+    result = num1 % num2;
+  }
+
+  // print result                                                               
+  printf("%d\n", result);
+  return 0;
+}
