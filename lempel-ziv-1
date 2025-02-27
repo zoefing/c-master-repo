@@ -1,0 +1,27 @@
+#include <stdio.h>
+
+void lzdecode1(char* dictionary, char* data, int dataLength){
+  // tracker int                                                                                         
+  int i;
+
+  // decoded string                                                                                      
+  char decoded[dataLength];
+
+  // for loop to iterate through "string"                                                                
+  for (i = 0; i < dataLength; i++) {
+    // at a given index, i, get the letter from                                                          
+    // indexing the data array and then the dict array                                                   
+    int index = data[i];
+    char a = dictionary[index];
+
+    // then, set the decoded string at that point                                                        
+    // to that value                                                                                     
+    decoded[i] = a;
+  }
+
+  // had to look this up; null termination                                                               
+  decoded[dataLength] = '\0';
+
+  // print the decoded word                                                                              
+  printf("%s", decoded);
+}
