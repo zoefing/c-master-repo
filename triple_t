@@ -1,0 +1,194 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+// struct for gameplay
+struct move {
+  int row;
+  int col;
+  char player;
+};
+
+// function to check validity of move
+int valid_move(struct move player_move, char game_board[3][3]){
+  // if space is not within bounds
+  if (player_move.col > 2 || player_move.col < 0 || player_move.row > 2 || player_move.row < 0) {
+    // move is invalid; return 0
+    return 0;
+  }
+
+  // if move is within bounds
+  if (player_move.col <= 2 && player_move.col >= 0 && player_move.row <= 2 && player_move.col >= 0) {
+    // check if board space is empty
+    if (game_board[player_move.row][player_move.col] != ('_')) {
+      // if board space is something other than the default empty tile
+      // move is invalid; return 0
+      return 0;
+    }
+    // board space is empty
+    else {
+      // move is valid; return 1
+      return 1;
+    }
+  }
+}
+
+// main function
+int main(){
+  // vars
+
+  // create game board
+  char game_board[3][3] = {{'_','_','_'},{'_','_','_'},{'_','_','_'}};
+
+  // storage var for user input
+  char response;
+
+  // bool for output play
+  bool output_play = true;
+
+  // reference struct
+  struct move player_move;
+
+  // while loop vars
+  // tracker for game over
+  // tracker for turn #
+  bool game_over = false;
+  int turn_num = 1;
+  
+  // prompt user for whether they want play outputted
+  printf("Output Play (y/n):\n");
+  scanf("%c", &response);
+
+  // print response
+  printf("You entered %c.\n", response);
+
+  // if response is 'n'
+  if (response == 'n') {
+    // set output_play to false; do not output play
+    output_play = false;
+  }
+
+  // otherwise, assume true and start game
+  // print start message
+  printf("Starting game with 3 x 3 board.\n");
+
+  // print directions
+  printf("Each player should enter\na row and col num (eg: 2 0).\n");
+
+  // while game is not over
+  while(!game_over) {
+    // get player num from turn
+    // an odd turn means it's player 1
+    // an even turn mean's it's player 2
+    int player_num = (turn_num % 2) != 0 ? 1:2;
+    
+    // get player input
+    while (true) {
+        // print player num
+        printf("Player %d:\n", player_num);
+        
+        // get player input for row
+        scanf("%d %d", &player_move.row, &player_move.col);
+        
+        // check for termination request
+        if (player_move.row == -1 || player_move.col == -1){
+            // quit
+            exit;
+        }
+        
+        // check if move is valid
+        // invalid move
+        if (valid_move(player_move, game_board) != 1) {
+            // prompt player to try again
+            printf("Incorrect value, try again.\n");
+        }
+        
+        // valid move
+        if (valid_move(player_move, game_board) == 1) {
+            break;
+        }
+    }
+    
+    // print player move
+    printf("Player %d entered %d %d.\n", player_num, player_move.row, player_move.col);
+    
+    // update game board
+    // use same functionality as determining player number
+    // (see above)
+    player_move.player = (turn_num % 2) != 0 ? 'O':'X';
+    game_board[player_move.row][player_move.col] = player_move.player;
+
+    // print if outplay is on
+    // skip and occurrences of '_'
+    // note: had to check stack overflow for that functionality
+    if (output_play) {
+      printf("-------------\n");
+      printf("| %c | %c | %c |\n", (game_board[0][0] == '_') ? ' ' : game_board[0][0],
+                                   (game_board[0][1] == '_') ? ' ' : game_board[0][1], 
+                                         (game_board[0][2] == '_') ? ' ' : game_board[0][2]);
+      printf("-------------\n");
+      printf("| %c | %c | %c |\n", (game_board[1][0] == '_') ? ' ' : game_board[1][0], 
+                                         (game_board[1][1] == '_') ? ' ' : game_board[1][1], 
+                                         (game_board[1][2] == '_') ? ' ' : game_board[1][2]);
+      printf("-------------\n");
+      printf("| %c | %c | %c |\n", (game_board[2][0] == '_') ? ' ' : game_board[2][0], 
+                                         (game_board[2][1] == '_') ? ' ' : game_board[2][1], 
+                                         (game_board[2][2] == '_') ? ' ' : game_board[2][2]);
+      printf("-------------\n");
+    }
+
+    // check if game ending move has been made
+    for (int i = 0; i < 3; i++) {
+      // columns
+      if (game_board[0][i] != '_' && game_board[0][i] == game_board[1][i] && game_board[1][i] == game_board[2][i]) {
+    game_over = true;
+      }
+      // rows
+      if (game_board[i][0] != '_' && game_board[i][0] == game_board[i][1] && game_board[i][1] == game_board[i][2]){
+  game_over = true;
+      }
+      // diagonals
+      // case 1: left to right
+      if (game_board[0][0] != '_' && game_board[0][0] == game_board[1][1] && game_board[1][1] == game_board[2][2]){
+  game_over = true;
+      }
+      // case 2:right to left
+      if (game_board[0][2] != '_' && game_board[0][2] == game_board[1][1] && game_board[1][1] == game_board[2][0]){
+        game_over = true;
+      }      
+    }
+
+    // if game is continuing
+    if (!game_over){
+      // increment turn 
+      turn_num++;
+    }
+  }
+  
+  // if game is over
+  if (game_over) {
+    // print game winner
+    // use same functionality as determining player number
+    // (see above)
+    int game_winner = (turn_num % 2) != 0 ? 1:2;
+    printf("Player %d is the winner.\n", game_winner);
+
+    // print game board
+    printf("-------------\n");
+    printf("| %c | %c | %c |\n", (game_board[0][0] == '_') ? ' ' : game_board[0][0],
+                                 (game_board[0][1] == '_') ? ' ' : game_board[0][1],
+                                 (game_board[0][2] == '_') ? ' ' : game_board[0][2]);
+    printf("-------------\n");
+    printf("| %c | %c | %c |\n", (game_board[1][0] == '_') ? ' ' : game_board[1][0],
+                                 (game_board[1][1] == '_') ? ' ' : game_board[1][1],
+                                 (game_board[1][2] == '_') ? ' ' : game_board[1][2]);
+    printf("-------------\n");
+    printf("| %c | %c | %c |\n", (game_board[2][0] == '_') ? ' ' : game_board[2][0],
+                                 (game_board[2][1] == '_') ? ' ' : game_board[2][1],
+                                 (game_board[2][2] == '_') ? ' ' : game_board[2][2]);
+    printf("-------------\n");
+  }
+  
+  // return statement
+  return 0;
+}
